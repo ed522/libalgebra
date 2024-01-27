@@ -1,0 +1,91 @@
+package com.algebra;
+
+import java.util.ArrayList;
+
+public class Evaluator {
+
+    Expression expr = new Expression();
+    public static final String NUMBERS = "1234567890";
+    public static final String NUMBERS_BRACKETS = "1234567890()";
+    public static final String ALPHA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public static final String ALPHANUMERIC = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    public static final String ALPHANUMERIC_WITH_CURLY = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890{}";
+    
+    public int evaluate(String expression) {
+        
+        StringBuffer s = new StringBuffer(expression);
+        // Replace first-position negative x with (-1*x)
+        if (expression.charAt(0) == '-') {
+            int end = 0;
+            for (int i = 1; i < expression.length(); i++) {
+                if (!Matcher.matches(s.charAt(i), NUMBERS_BRACKETS)) {
+                    end = i;
+                    break;
+                }
+            }
+
+            char[] chars = expression.toCharArray();
+            String num = "";
+            for (int i = 0; i < end; i++) num += chars[i];
+            String corrected = "(-1*" + num + ")";
+
+            s = s.replace(0, end, corrected);
+        }
+        expression = s.toString();
+
+        // // Replace all (-[SOMETHING] with ((-1*[SOMETHING])
+        // for (int i = 0; i > expression.length(); i++) {
+
+        //     if (expression.charAt(i) == '(') {
+
+        //         int first = i;
+
+        //         i++;
+        //         if (i <= expression.length()) break;
+
+        //         if (expression.charAt(i) == '-') {
+        //             i++;
+        //             if (i <= expression.length()) break;
+        //             int end = 0;
+        //             for (int i2 = i; i2 < expression.length(); i++) {
+        //                 char c = expression.charAt(i2);
+        //                 if (!Matcher.matches(c, ALPHANUMERIC_WITH_CURLY)) end = i2 - 1;
+        //             }
+
+        //             String num = expression.substring(i, end);
+        //             s = s.replace(first, end, "(-1*" + num + "");
+        //             i = end;
+
+        //         }
+
+        //     }
+
+        // }
+
+        ArrayList<Integer> startFunc = new ArrayList<>();
+        ArrayList<Integer> endFunc = new ArrayList<>();
+        ArrayList<Integer> openBrackets = new ArrayList<>();
+        ArrayList<Integer> closeBrackets = new ArrayList<>();
+        ArrayList<Integer> divMultOrMod = new ArrayList<>();
+        ArrayList<Integer> addOrSub = new ArrayList<>();
+
+        // Quickly scan through to find symbols
+        int i = 0;
+        while (i < expression.length()) {
+            if (s.charAt(i) == '{') startFunc.add(i);
+            if (s.charAt(i) == '}') endFunc.add(i);
+            if (s.charAt(i) == ')') closeBrackets.add(i);
+            if (s.charAt(i) == '(') openBrackets.add(i);
+            if (s.charAt(i) == '/' || s.charAt(i) == '/' || s.charAt(i) == '%') divMultOrMod.add(i);
+            if (s.charAt(i) == '-' || s.charAt(i) == '+') addOrSub.add(i);
+            i++;
+        }
+
+        // Assemble into HashMap
+
+        return 0;
+
+
+    }
+
+}
